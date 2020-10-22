@@ -1,37 +1,70 @@
 package com.example.startkotlin2.data
 
+import androidx.lifecycle.MutableLiveData
+import java.util.*
+
 object NotesRepository{
 
-    //private val notes: List<Note> = listOf()
-    //private List<>() notes2 = new List<Notes>;
-    private val notes = listOf<Note>(
-        Note("Первая заметка",
+    private val notesLiveData = MutableLiveData<List<Note>>()
+
+    private val notes = mutableListOf(
+
+        Note(
+            UUID.randomUUID().toString(),
+            "Первая заметка",
         "Текст первой заметки.",
-        0xfff06292.toInt()
+            Note.Color.WHITE
         ),
-        Note("Вторая заметка",
+        Note(
+            UUID.randomUUID().toString(),
+            "Вторая заметка",
             "Текст второй заметки.",
-            0xff9575cd.toInt()
+            Note.Color.YELLOW
         ),
-        Note("Третья заметка",
+        Note(
+            UUID.randomUUID().toString(),
+            "Третья заметка",
             "Текст третьей заметки.",
-            0xff64b5f6.toInt()
+            Note.Color.GREEN
         ),
-        Note("Четвертая заметка",
+        Note(
+            UUID.randomUUID().toString(),
+            "Четвертая заметка",
             "Текст четвертой заметки.",
-            0xff4db6ac.toInt()
+            Note.Color.BLUE
         ),
-        Note("Пятая заметка",
+        Note(
+            UUID.randomUUID().toString(),
+            "Пятая заметка",
             "Текст пятой заметки.",
-            0xffb2ff59.toInt()
+            Note.Color.RED
         ),
-        Note("Шестая заметка",
+        Note(
+            UUID.randomUUID().toString(),
+            "Шестая заметка",
             "Текст шестой заметки.",
-            0xffffeb3b.toInt()
+            Note.Color.VIOLET
         )
     )
 
-    fun getNotes(): List<Note>{
-        return notes
+    init {
+        notesLiveData.value = notes
     }
+
+    fun saveNote(note: Note){
+        addOrReplace(note)
+        notesLiveData.value = notes
+    }
+
+    fun addOrReplace(note: Note){
+        for (i: Int in notes.indices){
+            if(notes[i] == note){
+                notes[i] = note
+                return
+            }
+        }
+        notes.add(note)
+    }
+
+    fun getNotes(): MutableLiveData<List<Note>> = NotesRepository.notesLiveData
 }
